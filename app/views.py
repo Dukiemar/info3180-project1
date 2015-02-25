@@ -9,7 +9,7 @@ This file creates your application.
 from app import app
 from flask import render_template, request, redirect, url_for
 from app import db
-from app.models import User
+from app.models import Signin
 
 from .form import signUp
 
@@ -60,11 +60,11 @@ def page_not_found(error):
     return render_template('404.html'), 404
 
 
-if __name__ == '__main__':   
-  app.run(debug=True,host="0.0.0.0",port="8888")
+#if __name__ == '__main__':   
+ #app.run(debug=True,host="0.0.0.0",port="8888")
     
 
-    # Save e-mail to database and send to success page
+  
 @app.route('/signup')
 def signup():
   return render_template('signup.html')
@@ -72,21 +72,15 @@ def signup():
 @app.route('/profile', methods=['GET','POST'])
 def profile():
     form=signUp(csrf_enabled=False)
-    if request.method == 'POST':
-        firstname = request.form['firstname']
-        fname = User(firstname)
-        lastname = request.form['lastname']
-        lname=User(lastname)
-        age = request.form['age']
-        ag=User(age)
-        image=request.form['image']
-        img=User(img)
-        db.session.add(fname)
-        db.session.add(lname)
-        db.session.add(ag)
-        db.session.add(img)
-        db.session.commit()  
+    #import pdb;pdb.set.trace()
+    if request.method == 'POST' and form.validate():
+      #user=User(request.form['image'],request.form['firstname'],request.form['lastname'] ,request.form['age'], request.form['sex'])
+      user=Signin(form.firstname.data, form.lastname.data, form.age.data, form.sex.data,form.image.data)
+      #user=User(firstname=firstname,lastname=lastname,age=age,sex=sex,image=image)
+      db.session.add(user)
+      db.session.commit()  
     return render_template('signup.html',form=form)
+    
 
 if __name__ == '__main__':
   app.run(debug=True,host="0.0.0.0",port="8080")

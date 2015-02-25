@@ -2,7 +2,8 @@
 # Flask
 # ----------------------
 flask
-
+Flask-SQLAlchemy
+psycopg2
 
 # ----------------------
 # Testing
