@@ -9,9 +9,10 @@ This file creates your application.
 from app import app
 from flask import render_template, request, redirect, url_for
 from app import db
-from app.models import Signin
-
+from app.models import SignUp
+from flask import jsonify, session
 from .form import signUp
+import time
 
 import os
 ###
@@ -60,14 +61,9 @@ def page_not_found(error):
     return render_template('404.html'), 404
 
 
-#if __name__ == '__main__':   
- #app.run(debug=True,host="0.0.0.0",port="8888")
-    
-
-  
-@app.route('/signup')
-def signup():
-  return render_template('signup.html')
+@app.route("/timeinfo/")
+def timeinfo():
+  return time.strftime('%a %d %b %Y')
 
 @app.route('/profile', methods=['GET','POST'])
 def profile():
@@ -75,13 +71,37 @@ def profile():
     #import pdb;pdb.set.trace()
     if request.method == 'POST' and form.validate():
       #user=User(request.form['image'],request.form['firstname'],request.form['lastname'] ,request.form['age'], request.form['sex'])
-      user=Signin(form.firstname.data, form.lastname.data, form.age.data, form.sex.data,form.image.data)
-      #user=User(firstname=firstname,lastname=lastname,age=age,sex=sex,image=image)
+#     img_func = un + '_' + secure_filename(img.filename) #file_path=os.path.join(app.config['UPLOAD_FOLDER'],img_func)
+#      image.save(file_path)
+      user=SignUp(form.firstname.data, form.lastname.data, form.age.data, form.sex.data,form.image.data)
       db.session.add(user)
       db.session.commit()  
     return render_template('signup.html',form=form)
-    
+  
+@app.route('/profiles',methods=['GET','POST'])
+def profiles():
+  users=db.session.query(SignUp).all()
+  if request.headers['Content-Type']=='application/json':
+    lst=[]
+    for user in users:
+      lst.append({'id':user.id, 'image':user.image, 'fname':user.firstname,'lname':user.lastname,'sex':user.sex, 'age':user.age,'highscore':user.highscore,'tdollar':user.tdollars})
+      users={'users':lst}
+      return Response(json.dumps(users), mimetype='application/json')
+  else:
+    return render_template('profiles.html', users=users)
+  
+@app.route('/profile/<userid>',methods=['GET','POST'])
+def profile_view(userid):
+  prof=SignUp.query.filter_by(id=userid).first()
+  if (request.method == 'POST' or request.headers['Content-Type'] == 'application/json'):
+    return jsonify(id=prof.id, firstname=prof.fristname, lastname=prof.lastname, image=prof.image, sex=prof.sex, age=prof.age,highscore=prof.highscore,tdollars=prof.tdollars)
+  else:
+    user = {'id':prof.id, 'image':prof.image, 'age':prof.age, 'fname':prof.firstname, 'lname':prof.lastname, 'sex':prof.sex,'highscore':prof.highscore,'tdollars':prof.tdollars}
+    return render_template('profile.html', user=user,mytime=timeinfo())# datestr=date_to_str(usr.datejoined))
+  
+  
 
+    
 if __name__ == '__main__':
   app.run(debug=True,host="0.0.0.0",port="8080")
 

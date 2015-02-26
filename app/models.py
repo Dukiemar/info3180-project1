@@ -1,13 +1,15 @@
 from . import db
 
 
-class Signin(db.Model):
+class SignUp(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   image=db.Column(db.String(120),unique=True)
   firstname = db.Column(db.String(80), unique=True)
   lastname = db.Column(db.String(120), unique=True)
   age=db.Column(db.String(64),unique=True)
   sex=db.Column(db.String(64),unique=True)
+  highscore=db.Column(db.Integer)
+  tdollars=db.Column(db.Integer)
   
     
   def __init__(self,firstname,lastname,age,sex,image):
@@ -16,9 +18,9 @@ class Signin(db.Model):
     self.lastname = lastname
     self.age=age
     self.sex=sex
+    self.highscore=0
+    self.tdollars=0
   
-  
-
   def __repr__(self):
-      return '<User %r>' % self.firstname
+      return '<SignUp %r>' % self.firstname
 
