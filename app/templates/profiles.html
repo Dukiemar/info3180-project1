@@ -22,7 +22,7 @@
   {% for user in users %}
    <tr>
      <td>{{user.id}}</td>
-     <td>{{user.lastname}},{{user.firstname}}<td>
+     <td><a href='/profile/{{user.id}}'>{{user.lastname}},{{user.firstname}}</a><td>
    </tr> 
   {% endfor %}
     </table>

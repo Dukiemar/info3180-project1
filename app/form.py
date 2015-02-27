@@ -1,10 +1,10 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, TextField;
+from wtforms import StringField, TextField, FileField
 from wtforms.validators import DataRequired, Required
-
+from flask_wtf.file import FileField, FileRequired
 
 class signUp(Form):
-  image=TextField('image', validators=[Required()])
+  image=FileField('image', validators=[Required()])
   firstname = TextField('firstname', validators=[Required()])
   lastname = TextField('lastname', validators=[Required()])
   age = TextField('age', validators=[Required()])
