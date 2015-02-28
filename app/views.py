@@ -6,7 +6,7 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 import os
-from flask_wtf.file import FileField
+#from flask_wtf.file import FileField
 from werkzeug import secure_filename
 from app import app
 from flask import render_template, request, redirect, url_for,send_file,flash
