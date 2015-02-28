@@ -9,7 +9,7 @@ psycopg2
 # Testing
 # ----------------------
 mock
-Flask-SQLAlchemy==2.0
+
 
 
 # ----------------------
