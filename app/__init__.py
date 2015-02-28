@@ -1,4 +1,4 @@
-#from flask import Flask
+from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from config import SQLALCHEMY_DATABASE_URI
 
